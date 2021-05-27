@@ -1,0 +1,39 @@
+package cn.leo.compose_list.model
+
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingSource
+import cn.leo.compose_list.bean.TitleBean
+import cn.leo.compose_list.paging.SimplePager
+import java.text.SimpleDateFormat
+import java.util.*
+
+class NewsViewModel : BaseViewModel() {
+
+    private val mDate = Calendar.getInstance().apply {
+        add(Calendar.DATE, 1)
+    }
+
+    private val initialKey = SimpleDateFormat("yyyyMMdd", Locale.CHINA)
+        .format(mDate.time)
+        .toLong()
+
+    val pager = SimplePager<Long, Any>(
+        viewModelScope,
+        enablePlaceholders = true
+    ) {
+        val date = it.key ?: initialKey
+        try {
+            //从网络获取数据
+            val data = api.getNews(date)
+            //添加title
+            val list: MutableList<Any> = data.stories.toMutableList()
+            list.add(0, TitleBean(date.toString()))
+            //返回数据
+            PagingSource.LoadResult.Page(list, null, data.date?.toLongOrNull())
+        } catch (e: Exception) {
+            //请求失败
+            PagingSource.LoadResult.Error(e)
+        }
+    }
+
+}
