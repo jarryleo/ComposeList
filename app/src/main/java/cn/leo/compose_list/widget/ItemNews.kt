@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.coil.rememberCoilPainter
 
 @Composable
-inline fun ItemNews(title: String, image: String, noinline onClick: () -> Unit = {}) {
+fun ItemNews(title: String, image: String, onClick: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .clickable(onClick = onClick)
