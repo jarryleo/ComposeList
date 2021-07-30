@@ -13,7 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.compose.rememberImagePainter
 
 @Composable
 fun ItemNews(title: String, image: String, onClick: () -> Unit = {}) {
@@ -36,7 +36,7 @@ fun ItemNews(title: String, image: String, onClick: () -> Unit = {}) {
             modifier = Modifier
                 .size(52.dp)
                 .clip(RoundedCornerShape(8.dp)),
-            painter = rememberCoilPainter(request = image),
+            painter = rememberImagePainter(image),
             contentDescription = title
         )
     }

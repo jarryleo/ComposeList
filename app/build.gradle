@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "cn.leo.compose_list"
-        minSdk 21
+        minSdk 24
         targetSdk 30
         versionCode 1
         versionName "1.0"
@@ -57,11 +57,20 @@ dependencies {
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
 
+
+    //图片请求库
+    implementation 'com.google.accompanist:accompanist-coil:0.15.0'
+    //下拉刷新
+    implementation 'com.google.accompanist:accompanist-swiperefresh:0.15.0'
+    //constraintLayout
+    implementation 'androidx.constraintlayout:constraintlayout-compose:1.0.0-beta01'
+    //navigation
+    implementation 'androidx.navigation:navigation-compose:2.4.0-alpha05'
+
     //生命周期辅助ktx
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
-
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07'
 
     //Paging3
@@ -75,13 +84,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 
-    //图片请求库
-    implementation 'com.google.accompanist:accompanist-coil:0.15.0'
-    //下拉刷新 （有版本编译问题）
-    implementation 'com.google.accompanist:accompanist-swiperefresh:0.15.0'
-    //constraintLayout
-    implementation 'androidx.constraintlayout:constraintlayout-compose:1.0.0-beta01'
-    implementation 'androidx.navigation:navigation-compose:2.4.0-alpha05'
 
     //单元测试
     testImplementation 'junit:junit:4.13.2'
