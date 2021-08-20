@@ -1,39 +1,54 @@
 package cn.leo.compose_list.ui.page
 
+import android.util.Log
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
+import androidx.compose.runtime.collectAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
-import cn.leo.compose_list.ui.route.NewsDestinations
-import cn.leo.compose_list.ui.route.NewsDestinations.NEWS_URL_KEY
 import cn.leo.compose_list.ui.theme.ComposeListTheme
 import cn.leo.compose_list.ui.widget.MyAppBar
-import cn.leo.compose_list.ui.widget.WebView
+import cn.leo.navigation.NavigationManager
+import cn.leo.page.Directions
+import cn.leo.page.NewsDirections
 
 @Composable
-fun HomePage() {
+fun HomePage(manager: NavigationManager) {
     ComposeListTheme {
         Scaffold(topBar = {
             MyAppBar(title = "知乎日报")
         }) {
             val navController = rememberNavController()
+            //导航控制
+            manager.commands.collectAsState().value.also { command ->
+                Log.e("HomePage: ", "commands")
+                if (command.destination.isNotEmpty()) {
+                    navController.navigate(command.destination)
+                }
+            }
+            navController.addOnDestinationChangedListener { _, _, _ ->
+                manager.navigate(Directions.Default)
+            }
             NavHost(
                 navController = navController,
-                startDestination = NewsDestinations.NEWS_LIST_ROUTE,
+                startDestination = NewsDirections.NewsList.destination,
                 builder = {
-                    composable(route = NewsDestinations.NEWS_LIST_ROUTE) {
-                        NewsList(navController)
+                    composable(route = NewsDirections.NewsList.destination) {
+                        NewsList(
+                            hiltViewModel(
+                                navController.getBackStackEntry(
+                                    route = NewsDirections.NewsList.destination
+                                )
+                            )
+                        )
                     }
                     composable(
-                        route = "${NewsDestinations.NEWS_ROUTE}/{$NEWS_URL_KEY}",
-                        arguments = listOf(navArgument(NEWS_URL_KEY) {
-                            type = NavType.StringType
-                        })
+                        route = NewsDirections.NewsDetails.destination,
+                        arguments = NewsDirections.NewsDetails.arguments
                     ) { backStackEntry ->
-                        val url = backStackEntry.arguments?.getString(NEWS_URL_KEY)
+                        val url = backStackEntry.arguments?.getString("url")
                         if (url != null) {
                             WebView(url)
                         }

@@ -37,12 +37,14 @@ fun <T : Any> RefreshList(
             //条目布局
             itemContent()
             //加载更多状态：加载中和加载错误,没有更多
-            item {
-                lazyPagingItems.apply {
-                    when (loadState.append) {
-                        is LoadState.Loading -> LoadingItem()
-                        is LoadState.Error -> ErrorItem { retry() }
-                        is LoadState.NotLoading -> NoMoreItem()
+            if (!rememberSwipeRefreshState.isRefreshing) {
+                item {
+                    lazyPagingItems.apply {
+                        when (loadState.append) {
+                            is LoadState.Loading -> LoadingItem()
+                            is LoadState.Error -> ErrorItem { retry() }
+                            is LoadState.NotLoading -> NoMoreItem()
+                        }
                     }
                 }
             }

@@ -1,18 +1,16 @@
-package cn.leo.compose_list.ui.widget
+package cn.leo.compose_list.ui.page
 
 import android.R
 import android.annotation.SuppressLint
 import android.net.http.SslError
 import android.webkit.*
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,16 +22,16 @@ import androidx.compose.ui.viewinterop.AndroidView
 
 @Composable
 fun WebView(url: String) {
-    var progress = remember { 0f }
-    var showProgress = remember { true }
-    var showError = remember { false }
-    if (showError) {
+    val showError = remember { mutableStateOf(false) }
+    if (showError.value) {
         WebErrorContent {
-            showError = false
+            showError.value = false
         }
         return
     }
     Box {
+        val progress = remember { mutableStateOf(0f) }
+        val showProgress = remember { mutableStateOf(true) }
         AndroidView(factory = { WebView(it) }) { web ->
             web.apply {
                 webViewClient = object : WebViewClient() {
@@ -44,9 +42,10 @@ fun WebView(url: String) {
                     ) {
                         super.onReceivedError(view, request, error)
                         if (request?.isForMainFrame == true) {
-                            showError = true
+                            showError.value = true
                         }
                     }
+
                     override fun onReceivedHttpError(
                         view: WebView?,
                         request: WebResourceRequest?,
@@ -54,7 +53,7 @@ fun WebView(url: String) {
                     ) {
                         super.onReceivedHttpError(view, request, errorResponse)
                         if (request?.isForMainFrame == true) {
-                            showError = true
+                            showError.value = true
                         }
                     }
 
@@ -70,8 +69,8 @@ fun WebView(url: String) {
                 webChromeClient = object : WebChromeClient() {
                     override fun onProgressChanged(view: WebView?, newProgress: Int) {
                         super.onProgressChanged(view, newProgress)
-                        progress = newProgress.toFloat()
-                        showProgress = newProgress != 100
+                        progress.value = newProgress.toFloat() / 100f
+                        showProgress.value = newProgress != 100
                     }
                 }
             }
@@ -91,8 +90,11 @@ fun WebView(url: String) {
             }
             web.loadUrl(url)
         }
-        if (showProgress) {
-            LinearProgressIndicator(progress = progress)
+        if (showProgress.value) {
+            LinearProgressIndicator(
+                progress = progress.value,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
