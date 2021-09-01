@@ -1,13 +1,14 @@
 package cn.leo.compose_list.ui.page
 
-import android.util.Log
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.compose.collectAsLazyPagingItems
+import cn.leo.compose_list.model.NewsViewModel
 import cn.leo.compose_list.ui.theme.ComposeListTheme
 import cn.leo.compose_list.ui.widget.MyAppBar
 import cn.leo.navigation.NavigationManager
@@ -23,7 +24,6 @@ fun HomePage(manager: NavigationManager) {
             val navController = rememberNavController()
             //导航控制
             manager.commands.collectAsState().value.also { command ->
-                Log.e("HomePage: ", "commands")
                 if (command.destination.isNotEmpty()) {
                     navController.navigate(command.destination)
                 }
@@ -31,27 +31,18 @@ fun HomePage(manager: NavigationManager) {
             navController.addOnDestinationChangedListener { _, _, _ ->
                 manager.navigate(Directions.Default)
             }
+            //model
+            val viewModel: NewsViewModel = viewModel()
+            val lazyPagingItems = viewModel.pager.getData().collectAsLazyPagingItems()
             NavHost(
                 navController = navController,
                 startDestination = NewsDirections.NewsList.destination,
                 builder = {
-                    composable(route = NewsDirections.NewsList.destination) {
-                        NewsList(
-                            hiltViewModel(
-                                navController.getBackStackEntry(
-                                    route = NewsDirections.NewsList.destination
-                                )
-                            )
-                        )
+                    composable(NewsDirections.NewsList.destination) {
+                        NewsList(viewModel, lazyPagingItems)
                     }
-                    composable(
-                        route = NewsDirections.NewsDetails.destination,
-                        arguments = NewsDirections.NewsDetails.arguments
-                    ) { backStackEntry ->
-                        val url = backStackEntry.arguments?.getString("url")
-                        if (url != null) {
-                            WebView(url)
-                        }
+                    composable(NewsDirections.NewsDetails.destination) {
+                        WebView(viewModel)
                     }
                 })
         }

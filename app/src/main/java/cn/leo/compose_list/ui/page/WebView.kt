@@ -3,6 +3,7 @@ package cn.leo.compose_list.ui.page
 import android.R
 import android.annotation.SuppressLint
 import android.net.http.SslError
+import android.util.Log
 import android.webkit.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -19,9 +20,11 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import cn.leo.compose_list.model.NewsViewModel
 
 @Composable
-fun WebView(url: String) {
+fun WebView(model: NewsViewModel) {
+    val url = model.url
     val showError = remember { mutableStateOf(false) }
     if (showError.value) {
         WebErrorContent {
@@ -89,6 +92,7 @@ fun WebView(url: String) {
                 layoutAlgorithm = WebSettings.LayoutAlgorithm.NARROW_COLUMNS
             }
             web.loadUrl(url)
+            Log.e("WebView", "加载网址：$url")
         }
         if (showProgress.value) {
             LinearProgressIndicator(

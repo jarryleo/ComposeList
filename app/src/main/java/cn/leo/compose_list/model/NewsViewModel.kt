@@ -43,7 +43,12 @@ class NewsViewModel @Inject constructor(
         }
     }
 
+    var url: String = ""
     fun navigation(url: String) {
+        this.url = url
         navigationManager.navigate(NewsDirections.NewsDetails)
     }
+
+    var firstVisibleItemIndex = 0
+    var firstVisibleItemScrollOffset = 0
 }

@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
-    compileSdk 30
+    compileSdk 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "cn.leo.compose_list"
-        minSdk 24
+        minSdk 21
         targetSdk 30
         versionCode 1
         versionName "1.0"
@@ -69,7 +69,7 @@ dependencies {
     //constraintLayout
     implementation 'androidx.constraintlayout:constraintlayout-compose:1.0.0-beta02'
     //navigation
-    implementation 'androidx.navigation:navigation-compose:2.4.0-alpha06'
+    implementation 'androidx.navigation:navigation-compose:2.4.0-alpha07'
 
     //hilt
     implementation "com.google.dagger:hilt-android:2.35"
