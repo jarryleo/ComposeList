@@ -25,7 +25,15 @@ fun HomePage(manager: NavigationManager) {
             //导航控制
             manager.commands.collectAsState().value.also { command ->
                 if (command.destination.isNotEmpty()) {
-                    navController.navigate(command.destination)
+                    navController.navigate(command.destination) {
+                        anim {
+                            enter = android.R.anim.slide_in_left
+                            popEnter = android.R.anim.slide_in_left
+                            exit = android.R.anim.slide_out_right
+                            popExit = android.R.anim.slide_out_right
+                        }
+                        launchSingleTop = true
+                    }
                 }
             }
             navController.addOnDestinationChangedListener { _, _, _ ->
@@ -36,15 +44,15 @@ fun HomePage(manager: NavigationManager) {
             val lazyPagingItems = viewModel.pager.getData().collectAsLazyPagingItems()
             NavHost(
                 navController = navController,
-                startDestination = NewsDirections.NewsList.destination,
-                builder = {
-                    composable(NewsDirections.NewsList.destination) {
-                        NewsList(viewModel, lazyPagingItems)
-                    }
-                    composable(NewsDirections.NewsDetails.destination) {
-                        WebView(viewModel)
-                    }
-                })
+                startDestination = NewsDirections.NewsList.destination
+            ) {
+                composable(NewsDirections.NewsList.destination) {
+                    NewsList(viewModel, lazyPagingItems)
+                }
+                composable(NewsDirections.NewsDetails.destination) {
+                    WebView(viewModel)
+                }
+            }
         }
     }
 }

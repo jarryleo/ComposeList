@@ -58,7 +58,7 @@ fun <T : Any> RefreshList(
                 }
             }
         }
-        //恢复滑动位置，有问题
+        //恢复滑动位置，有bug,分页加载可能无法恢复
         LaunchedEffect("listState") {
             Log.e("listState", "index =$index , offset = $offset")
             listState.scrollToItem(index, offset)
