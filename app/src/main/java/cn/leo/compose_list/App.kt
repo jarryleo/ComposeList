@@ -3,8 +3,10 @@ package cn.leo.compose_list
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import dagger.hilt.android.HiltAndroidApp
 
-class App: Application() {
+@HiltAndroidApp
+class App : Application() {
     companion object {
         @SuppressLint("StaticFieldLeak")
         var context: Context? = null

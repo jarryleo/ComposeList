@@ -1,4 +1,4 @@
-package cn.leo.compose_list.widget
+package cn.leo.compose_list.ui.widget
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

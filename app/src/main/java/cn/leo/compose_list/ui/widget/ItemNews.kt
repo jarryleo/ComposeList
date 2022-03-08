@@ -1,4 +1,4 @@
-package cn.leo.compose_list.widget
+package cn.leo.compose_list.ui.widget
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,10 +13,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.compose.rememberImagePainter
 
 @Composable
-inline fun ItemNews(title: String, image: String, noinline onClick: () -> Unit = {}) {
+fun ItemNews(title: String, image: String, onClick: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .clickable(onClick = onClick)
@@ -36,7 +36,7 @@ inline fun ItemNews(title: String, image: String, noinline onClick: () -> Unit =
             modifier = Modifier
                 .size(52.dp)
                 .clip(RoundedCornerShape(8.dp)),
-            painter = rememberCoilPainter(request = image),
+            painter = rememberImagePainter(image),
             contentDescription = title
         )
     }

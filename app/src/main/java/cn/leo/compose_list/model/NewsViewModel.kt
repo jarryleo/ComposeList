@@ -4,10 +4,17 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingSource
 import cn.leo.compose_list.bean.TitleBean
 import cn.leo.compose_list.paging.SimplePager
+import cn.leo.navigation.NavigationManager
+import cn.leo.page.NewsDirections
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class NewsViewModel : BaseViewModel() {
+@HiltViewModel
+class NewsViewModel @Inject constructor(
+    private val navigationManager: NavigationManager
+) : BaseViewModel() {
 
     private val mDate = Calendar.getInstance().apply {
         add(Calendar.DATE, 1)
@@ -36,4 +43,12 @@ class NewsViewModel : BaseViewModel() {
         }
     }
 
+    var url: String = ""
+    fun navigation(url: String) {
+        this.url = url
+        navigationManager.navigate(NewsDirections.NewsDetails)
+    }
+
+    var firstVisibleItemIndex = 0
+    var firstVisibleItemScrollOffset = 0
 }
