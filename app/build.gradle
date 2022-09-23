@@ -6,13 +6,13 @@ plugins {
 }
 
 android {
-    compileSdk 31
-    buildToolsVersion "30.0.3"
+    compileSdk 32
+    //buildToolsVersion "32.0.0"
 
     defaultConfig {
         applicationId "cn.leo.compose_list"
         minSdk 21
-        targetSdk 30
+        targetSdk 32
         versionCode 1
         versionName "1.0"
 
@@ -40,8 +40,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.5.21'
+        kotlinCompilerExtensionVersion '1.1.1'
     }
 }
 
@@ -51,25 +50,28 @@ dependencies {
 
     //原生库
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
-    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.activity:activity-compose:1.3.1'
 
     //compose
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
+
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+
+    //implementation 'androidx.compose.material3:material3:1.0.0-alpha02'
 
     //图片请求库
     implementation 'com.google.accompanist:accompanist-coil:0.15.0'
     //下拉刷新
     implementation 'com.google.accompanist:accompanist-swiperefresh:0.17.0'
     //constraintLayout
-    implementation 'androidx.constraintlayout:constraintlayout-compose:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout-compose:1.0.1'
     //navigation
-    implementation 'androidx.navigation:navigation-compose:2.4.1'
+    implementation 'androidx.navigation:navigation-compose:2.5.2'
 
     //hilt
     implementation 'com.google.dagger:hilt-android:2.38.1'
@@ -80,25 +82,24 @@ dependencies {
     kapt 'androidx.hilt:hilt-compiler:1.0.0'
 
     //生命周期辅助ktx
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
 
     //Paging3
-    implementation 'androidx.paging:paging-common-ktx:3.1.0'
-    implementation 'androidx.paging:paging-compose:1.0.0-alpha14'
+    implementation 'androidx.paging:paging-common-ktx:3.1.1'
+    implementation 'androidx.paging:paging-compose:1.0.0-alpha15'
 
     //kotlin 协程
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
     //网络请求库
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 
-
     //单元测试
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.1.1"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.2.1"
 }
