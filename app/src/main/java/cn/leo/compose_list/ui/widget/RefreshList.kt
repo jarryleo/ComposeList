@@ -1,7 +1,6 @@
 package cn.leo.compose_list.ui.widget
 
 import android.util.Log
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
@@ -9,11 +8,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
 fun <T : Any> RefreshList(
@@ -23,30 +19,37 @@ fun <T : Any> RefreshList(
     offset: Int = 0,
     itemContent: LazyListScope.() -> Unit
 ) {
-    val rememberSwipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
+    val rememberSwipeRefreshState = rememberSwipeRefreshState(NORMAL)
     //错误页
     val err = lazyPagingItems.loadState.refresh is LoadState.Error
     if (err) {
         ErrorContent { lazyPagingItems.retry() }
         return
     }
-    SwipeRefresh(
+    EasySwipeRefresh(
         state = rememberSwipeRefreshState,
         onRefresh = { lazyPagingItems.refresh() }
     ) {
         //刷新状态
-        rememberSwipeRefreshState.isRefreshing =
-            lazyPagingItems.loadState.refresh is LoadState.Loading
+        rememberSwipeRefreshState.loadState = when{
+            lazyPagingItems.loadState.refresh is LoadState.Loading -> REFRESHING
+            lazyPagingItems.loadState.append is LoadState.Loading -> LOADING_MORE
+            else -> NORMAL
+        }
         //列表
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = it,
             horizontalAlignment = Alignment.CenterHorizontally,
             state = listState
         ) {
             //条目布局
             itemContent()
+            /*val loadMore = lazyPagingItems.loadState.append is LoadState.Loading
+            if (loadMore){
+                rememberSwipeRefreshState.loadState = LOADING_MORE
+            }
             //加载更多状态：加载中和加载错误,没有更多
-            if (!rememberSwipeRefreshState.isRefreshing) {
+            if (rememberSwipeRefreshState.loadState == LOADING_MORE) {
                 item {
                     lazyPagingItems.apply {
                         when (loadState.append) {
@@ -56,7 +59,7 @@ fun <T : Any> RefreshList(
                         }
                     }
                 }
-            }
+            }*/
         }
         //恢复滑动位置，有bug,分页加载可能无法恢复
         LaunchedEffect("listState") {
