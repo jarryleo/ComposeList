@@ -26,16 +26,17 @@ fun <T : Any> RefreshList(
         ErrorContent { lazyPagingItems.retry() }
         return
     }
-    EasySwipeRefresh(
-        state = rememberSwipeRefreshState,
-        onRefresh = { lazyPagingItems.refresh() }
-    ) {
-        //刷新状态
-        rememberSwipeRefreshState.loadState = when{
-            lazyPagingItems.loadState.refresh is LoadState.Loading -> REFRESHING
-            lazyPagingItems.loadState.append is LoadState.Loading -> LOADING_MORE
+    //刷新状态
+    rememberSwipeRefreshState.loadState =
+        when (lazyPagingItems.loadState.refresh) {
+            is LoadState.Loading -> REFRESHING
             else -> NORMAL
         }
+    EasySwipeRefresh(
+        state = rememberSwipeRefreshState,
+        onRefresh = { lazyPagingItems.refresh() },
+        onLoadMore = { lazyPagingItems.retry() }
+    ) {
         //列表
         LazyColumn(
             modifier = it,
@@ -44,22 +45,6 @@ fun <T : Any> RefreshList(
         ) {
             //条目布局
             itemContent()
-            /*val loadMore = lazyPagingItems.loadState.append is LoadState.Loading
-            if (loadMore){
-                rememberSwipeRefreshState.loadState = LOADING_MORE
-            }
-            //加载更多状态：加载中和加载错误,没有更多
-            if (rememberSwipeRefreshState.loadState == LOADING_MORE) {
-                item {
-                    lazyPagingItems.apply {
-                        when (loadState.append) {
-                            is LoadState.Loading -> LoadingItem()
-                            is LoadState.Error -> ErrorItem { retry() }
-                            is LoadState.NotLoading -> NoMoreItem()
-                        }
-                    }
-                }
-            }*/
         }
         //恢复滑动位置，有bug,分页加载可能无法恢复
         LaunchedEffect("listState") {
