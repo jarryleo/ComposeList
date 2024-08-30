@@ -3,7 +3,6 @@ package cn.leo.compose_list.ui.page
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
 import cn.leo.compose_list.bean.NewsBean
 import cn.leo.compose_list.bean.TitleBean
 import cn.leo.compose_list.model.NewsViewModel
@@ -20,7 +19,8 @@ fun NewsList(
     val offset = model.firstVisibleItemScrollOffset
     val listState = rememberLazyListState(index, offset)
     RefreshList(lazyPagingItems, listState, index, offset) {
-        items(lazyPagingItems) { item ->
+        items(lazyPagingItems.itemCount) { index ->
+            val item = lazyPagingItems[index]
             if (item is NewsBean.StoriesBean) {
                 ItemNews(item.getTitleText(), item.getImage()) {
                     //点击跳转

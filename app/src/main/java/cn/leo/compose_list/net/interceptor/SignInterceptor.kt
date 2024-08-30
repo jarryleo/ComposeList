@@ -45,7 +45,7 @@ class SignInterceptor : Interceptor {
         //对参数进行签名
         val signParams = TreeMap<String, String>()
         val originalRequestBody = request.body!!
-        var newRequestBody: RequestBody? = null
+        var newRequestBody: RequestBody?
         // 传统表单
         if (originalRequestBody is FormBody) {
             val builder = FormBody.Builder()

@@ -3,7 +3,7 @@ package cn.leo.navigation
 import cn.leo.page.Directions.Default
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class NavigationManager {
+object NavigationManager {
 
     var commands = MutableStateFlow(Default)
 

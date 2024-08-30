@@ -1,8 +1,10 @@
 package cn.leo.compose_list.ui.page
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,7 +22,7 @@ fun HomePage(manager: NavigationManager) {
     ComposeListTheme {
         Scaffold(topBar = {
             MyAppBar(title = "知乎日报")
-        }) {
+        }) { innerPadding ->
             val navController = rememberNavController()
             //导航控制
             manager.commands.collectAsState().value.also { command ->
@@ -43,6 +45,7 @@ fun HomePage(manager: NavigationManager) {
             val viewModel: NewsViewModel = viewModel()
             val lazyPagingItems = viewModel.pager.getData().collectAsLazyPagingItems()
             NavHost(
+                modifier = Modifier.padding(innerPadding),
                 navController = navController,
                 startDestination = NewsDirections.NewsList.destination
             ) {
